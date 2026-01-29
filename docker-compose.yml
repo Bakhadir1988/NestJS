@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: nestjs_db
+    environment:
+      POSTGRES_DB: nestjs_course
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    # Явно подключаем сервис к нашей сети
+    networks:
+      - nest-network
+
+  # adminer:
+  #   image: adminer
+  #   container_name: nestjs_db_client
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - '8081:8080'
+  #   restart: always
+  #   # И этот сервис тоже подключаем к той же сети
+  #   networks:
+  #     - nestjs-network
+
+  pgadmin:
+    image: dpage/pgadmin4:9.8
+    ports:
+      - 5050:80
+    environment:
+      # Required by pgAdmin
+      PGADMIN_DEFAULT_EMAIL: demo@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+
+      # Don't require the user to login
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+
+      # Don't require a "master" password after logging in
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+
+    networks:
+      - nest-network
+
+volumes:
+  pgdata:
+
+# Определяем нашу сеть
+networks:
+  nest-network:
+    driver: bridge
