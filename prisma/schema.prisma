@@ -14,17 +14,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Habit {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  completed   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  // owner       User     @relation(fields: [ownerId], references: [id])
-  // ownerId     Int
-}
-
+// Модель для хранения пользователей
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
@@ -32,5 +22,58 @@ model User {
   password    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
-  // habits      Habit[]
+
+  // Связь: один пользователь может быть автором многих досок
+  boards      Board[]
+}
+
+// Модель для хранения досок
+model Board {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связь: доска принадлежит одному пользователю
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+
+  // Связь: на доске много колонок
+  columns   Column[]
+
+  @@index([ownerId])
+}
+
+// Модель для хранения колонок
+model Column {
+  id        Int      @id @default(autoincrement())
+  name      String
+  order     Float    // Поле для сортировки колонок
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связь: колонка принадлежит одной доске
+  boardId   Int
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  // Связь: в колонке много задач
+  tasks     Task[]
+
+  @@index([boardId])
+}
+
+// Модель для хранения задач
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  order       Float    // Поле для сортировки задач в колонке
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Связь: задача принадлежит одной колонке
+  columnId    Int
+  column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  @@index([columnId])
 }
