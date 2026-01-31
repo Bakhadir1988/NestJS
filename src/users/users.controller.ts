@@ -8,7 +8,11 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
+import { type RequestWithUser } from 'src/auth/interfaces';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 import { UserEntity } from './entities/user.entity';
@@ -17,6 +21,14 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard) // <-- ЗАЩИЩАЕМ эндпоинт этим гардом
+  @Get('me')
+  async getProfile(@Request() req: RequestWithUser): Promise<UserEntity> {
+    const userId = req.user.id;
+    const user = await this.usersService.findOne(userId);
+    return new UserEntity(user);
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
