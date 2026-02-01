@@ -1,13 +1,23 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HabitsModule } from './habits/habits.module';
+import { AuthModule } from './auth/auth.module';
+import { BoardsModule } from './boards/boards.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [HabitsModule, PrismaModule, UsersModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    PrismaModule,
+    UsersModule,
+    BoardsModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
