@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ApiKeyGuard } from 'src/auth/guards/api-key.guard';
 
 import { BoardsController } from './boards.controller';
+import { BoardsService } from './boards.service';
 
 @Module({
   controllers: [BoardsController],
-  providers: [ApiKeyGuard],
+  providers: [BoardsService],
 })
 export class BoardsModule {}

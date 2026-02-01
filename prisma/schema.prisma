@@ -1,20 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider     = "prisma-client"
-  output       = "../generated/prisma"
-  moduleFormat = "cjs"
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// Модель для хранения пользователей
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
@@ -35,31 +28,13 @@ model Board {
   updatedAt DateTime @updatedAt
 
   // Связь: доска принадлежит одному пользователю
-  ownerId   Int
-  owner     User     @relation(fields: [ownerId], references: [id])
+  userId   Int
+  user     User     @relation(fields: [userId], references: [id])
 
   // Связь: на доске много колонок
   columns   Column[]
 
-  @@index([ownerId])
-}
-
-// Модель для хранения колонок
-model Column {
-  id        Int      @id @default(autoincrement())
-  name      String
-  order     Float    // Поле для сортировки колонок
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Связь: колонка принадлежит одной доске
-  boardId   Int
-  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-
-  // Связь: в колонке много задач
-  tasks     Task[]
-
-  @@index([boardId])
+  @@index([userId])
 }
 
 // Модель для хранения задач
@@ -76,4 +51,21 @@ model Task {
   column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
 
   @@index([columnId])
+}
+
+model Column {
+  id        Int      @id @default(autoincrement())
+  name      String
+  order     Float    // Поле для сортировки колонок
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связь: колонка принадлежит одной доске
+  boardId   Int
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  // Связь: в колонке много задач
+  tasks     Task[]
+
+  @@index([boardId])
 }

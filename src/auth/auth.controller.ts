@@ -2,7 +2,7 @@
 
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'generated/prisma/client';
+import { User } from 'src/generated/prisma/client';
 
 import { AuthService } from './auth.service';
 

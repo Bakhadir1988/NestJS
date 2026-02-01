@@ -1,6 +1,7 @@
 // src/auth/strategies/jwt.strategy.ts
 
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
@@ -8,7 +9,13 @@ import { JwtPayload, UserFromJwt } from '../interfaces';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
+    const jwtSecret = configService.get<string>('JWT_SECRET');
+
+    if (!jwtSecret) {
+      throw new Error('ACCESS_SECRET is not defined in environment');
+    }
+
     super({
       // 1. Указываем, как извлечь токен из запроса
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
 
       // 3. Указываем секретный ключ для проверки подписи
-      secretOrKey: 'YOUR_SUPER_SECRET_KEY', // ВАЖНО: Ключ должен быть тот же, что и в auth.module.ts
+      secretOrKey: jwtSecret, // ВАЖНО: Ключ должен быть тот же, что и в auth.module.ts
     });
   }
 
