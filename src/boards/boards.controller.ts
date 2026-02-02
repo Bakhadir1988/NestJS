@@ -7,12 +7,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
-import { UserFromJwt } from 'src/auth/interfaces';
-import { type RequestWithUser } from 'src/auth/interfaces';
+import { type RequestWithUser, UserFromJwt } from 'src/auth/interfaces';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -33,9 +34,12 @@ export class BoardsController {
   }
 
   @Get()
-  async findMany(@Request() request: RequestWithUser) {
+  async findMany(
+    @Request() request: RequestWithUser,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
     const user = request.user;
-    return this.boardsService.findMany(user);
+    return this.boardsService.findMany(user, paginationQuery);
   }
 
   @Get(':id')

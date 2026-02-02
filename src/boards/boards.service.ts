@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserFromJwt } from 'src/auth/interfaces';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -33,13 +34,36 @@ export class BoardsService {
     return new BoardEntity(newBoard);
   }
 
-  async findMany(user: UserFromJwt) {
-    const boards = await this.prisma.board.findMany({
-      where: {
-        userId: user.id,
+  async findMany(user: UserFromJwt, paginationQuery: PaginationQueryDto) {
+    const { page, limit } = paginationQuery;
+    const skip = (page - 1) * limit;
+
+    const [total, boards] = await this.prisma.$transaction([
+      this.prisma.board.count({
+        where: {
+          userId: user.id,
+        },
+      }),
+      this.prisma.board.findMany({
+        where: {
+          userId: user.id,
+        },
+        skip,
+        take: limit,
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: boards.map((board) => new BoardEntity(board)),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
       },
-    });
-    return boards.map((board) => new BoardEntity(board));
+    };
   }
 
   async findOne(id: number, user: UserFromJwt) {
