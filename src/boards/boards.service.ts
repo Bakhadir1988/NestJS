@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserFromJwt } from 'src/auth/interfaces';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -21,11 +17,14 @@ export class BoardsService {
   ): Promise<BoardEntity> {
     const newBoard = await this.prisma.board.create({
       data: {
-        ...createBoardDto,
-        user: {
-          // Используем connect для создания связи
-          connect: {
-            id: user.id,
+        // Явно указываем поля для Board
+        name: createBoardDto.name,
+
+        // А вот и магия:
+        memberships: {
+          create: {
+            userId: user.id, // ID текущего пользователя
+            role: 'OWNER', // Создатель доски - всегда OWNER
           },
         },
       },
@@ -35,19 +34,31 @@ export class BoardsService {
   }
 
   async findMany(user: UserFromJwt, paginationQuery: PaginationQueryDto) {
-    const { page, limit } = paginationQuery;
+    const { page, limit, search } = paginationQuery;
     const skip = (page - 1) * limit;
+
+    const where = {
+      memberships: {
+        some: {
+          userId: user.id,
+        },
+      },
+      deletedAt: null,
+    };
+
+    if (search) {
+      where['name'] = {
+        contains: search,
+        mode: 'insensitive',
+      };
+    }
 
     const [total, boards] = await this.prisma.$transaction([
       this.prisma.board.count({
-        where: {
-          userId: user.id,
-        },
+        where,
       }),
       this.prisma.board.findMany({
-        where: {
-          userId: user.id,
-        },
+        where,
         skip,
         take: limit,
       }),
@@ -67,31 +78,42 @@ export class BoardsService {
   }
 
   async findOne(id: number, user: UserFromJwt) {
-    const board = await this.prisma.board.findUnique({
+    const board = await this.prisma.board.findFirst({
       where: {
         id,
+        deletedAt: null,
+
+        // Фильтр по связи:
+        memberships: {
+          some: {
+            userId: user.id,
+          },
+        },
       },
     });
     if (!board) {
       throw new NotFoundException(`Board with ID ${id} not found`);
     }
-    if (board.userId !== user.id) {
-      throw new ForbiddenException(
-        'You are not authorized to access this board',
-      );
-    }
     return new BoardEntity(board);
   }
 
   async delete(id: number, user: UserFromJwt) {
-    const result = await this.prisma.board.deleteMany({
+    const result = await this.prisma.board.updateMany({
       where: {
         id: id,
-        userId: user.id,
+        memberships: {
+          some: {
+            userId: user.id,
+          },
+        },
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 
-    // deleteMany возвращает { count: ... }
+    // updateMany возвращает { count: ... }
     if (result.count === 0) {
       // Если ничего не удалено, значит доски не было или она чужая
       throw new NotFoundException(`Board with ID #${id} not found.`);

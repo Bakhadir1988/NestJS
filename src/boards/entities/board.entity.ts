@@ -9,6 +9,8 @@ export class BoardEntity implements Board {
 
   @Exclude()
   userId: number;
+  @Exclude()
+  deletedAt: Date | null;
 
   constructor(partial: Partial<BoardEntity>) {
     Object.assign(this, partial);

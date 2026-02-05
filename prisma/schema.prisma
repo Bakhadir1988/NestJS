@@ -8,6 +8,23 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  OWNER  // Владелец
+  MEMBER // Участник
+}
+
+model BoardMembership {
+  id        Int      @id @default(autoincrement())
+  role      Role     @default(MEMBER) // По умолчанию - участник
+  createdAt DateTime @default(now())
+  userId    Int
+  boardId   Int
+  board     Board    @relation(fields: [boardId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, boardId])
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
@@ -16,8 +33,7 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
-  // Связь: один пользователь может быть автором многих досок
-  boards      Board[]
+  memberships BoardMembership[]
 }
 
 // Модель для хранения досок
@@ -27,14 +43,13 @@ model Board {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Связь: доска принадлежит одному пользователю
-  userId   Int
-  user     User     @relation(fields: [userId], references: [id])
-
   // Связь: на доске много колонок
   columns   Column[]
 
-  @@index([userId])
+  // Связь: доска может быть удалена
+  deletedAt DateTime?
+
+  memberships BoardMembership[]
 }
 
 // Модель для хранения задач
