@@ -20,38 +20,24 @@ export type BoardMembershipModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregateBoardMembership = {
   _count: BoardMembershipCountAggregateOutputType | null
-  _avg: BoardMembershipAvgAggregateOutputType | null
-  _sum: BoardMembershipSumAggregateOutputType | null
   _min: BoardMembershipMinAggregateOutputType | null
   _max: BoardMembershipMaxAggregateOutputType | null
 }
 
-export type BoardMembershipAvgAggregateOutputType = {
-  id: number | null
-  userId: number | null
-  boardId: number | null
-}
-
-export type BoardMembershipSumAggregateOutputType = {
-  id: number | null
-  userId: number | null
-  boardId: number | null
-}
-
 export type BoardMembershipMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   role: $Enums.Role | null
   createdAt: Date | null
-  userId: number | null
-  boardId: number | null
+  userId: string | null
+  boardId: string | null
 }
 
 export type BoardMembershipMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   role: $Enums.Role | null
   createdAt: Date | null
-  userId: number | null
-  boardId: number | null
+  userId: string | null
+  boardId: string | null
 }
 
 export type BoardMembershipCountAggregateOutputType = {
@@ -63,18 +49,6 @@ export type BoardMembershipCountAggregateOutputType = {
   _all: number
 }
 
-
-export type BoardMembershipAvgAggregateInputType = {
-  id?: true
-  userId?: true
-  boardId?: true
-}
-
-export type BoardMembershipSumAggregateInputType = {
-  id?: true
-  userId?: true
-  boardId?: true
-}
 
 export type BoardMembershipMinAggregateInputType = {
   id?: true
@@ -139,18 +113,6 @@ export type BoardMembershipAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: BoardMembershipAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: BoardMembershipSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: BoardMembershipMinAggregateInputType
@@ -181,21 +143,17 @@ export type BoardMembershipGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: BoardMembershipCountAggregateInputType | true
-  _avg?: BoardMembershipAvgAggregateInputType
-  _sum?: BoardMembershipSumAggregateInputType
   _min?: BoardMembershipMinAggregateInputType
   _max?: BoardMembershipMaxAggregateInputType
 }
 
 export type BoardMembershipGroupByOutputType = {
-  id: number
+  id: string
   role: $Enums.Role
   createdAt: Date
-  userId: number
-  boardId: number
+  userId: string
+  boardId: string
   _count: BoardMembershipCountAggregateOutputType | null
-  _avg: BoardMembershipAvgAggregateOutputType | null
-  _sum: BoardMembershipSumAggregateOutputType | null
   _min: BoardMembershipMinAggregateOutputType | null
   _max: BoardMembershipMaxAggregateOutputType | null
 }
@@ -219,11 +177,11 @@ export type BoardMembershipWhereInput = {
   AND?: Prisma.BoardMembershipWhereInput | Prisma.BoardMembershipWhereInput[]
   OR?: Prisma.BoardMembershipWhereInput[]
   NOT?: Prisma.BoardMembershipWhereInput | Prisma.BoardMembershipWhereInput[]
-  id?: Prisma.IntFilter<"BoardMembership"> | number
+  id?: Prisma.StringFilter<"BoardMembership"> | string
   role?: Prisma.EnumRoleFilter<"BoardMembership"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"BoardMembership"> | Date | string
-  userId?: Prisma.IntFilter<"BoardMembership"> | number
-  boardId?: Prisma.IntFilter<"BoardMembership"> | number
+  userId?: Prisma.StringFilter<"BoardMembership"> | string
+  boardId?: Prisma.StringFilter<"BoardMembership"> | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -239,15 +197,15 @@ export type BoardMembershipOrderByWithRelationInput = {
 }
 
 export type BoardMembershipWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   userId_boardId?: Prisma.BoardMembershipUserIdBoardIdCompoundUniqueInput
   AND?: Prisma.BoardMembershipWhereInput | Prisma.BoardMembershipWhereInput[]
   OR?: Prisma.BoardMembershipWhereInput[]
   NOT?: Prisma.BoardMembershipWhereInput | Prisma.BoardMembershipWhereInput[]
   role?: Prisma.EnumRoleFilter<"BoardMembership"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"BoardMembership"> | Date | string
-  userId?: Prisma.IntFilter<"BoardMembership"> | number
-  boardId?: Prisma.IntFilter<"BoardMembership"> | number
+  userId?: Prisma.StringFilter<"BoardMembership"> | string
+  boardId?: Prisma.StringFilter<"BoardMembership"> | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId_boardId">
@@ -259,24 +217,23 @@ export type BoardMembershipOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
   _count?: Prisma.BoardMembershipCountOrderByAggregateInput
-  _avg?: Prisma.BoardMembershipAvgOrderByAggregateInput
   _max?: Prisma.BoardMembershipMaxOrderByAggregateInput
   _min?: Prisma.BoardMembershipMinOrderByAggregateInput
-  _sum?: Prisma.BoardMembershipSumOrderByAggregateInput
 }
 
 export type BoardMembershipScalarWhereWithAggregatesInput = {
   AND?: Prisma.BoardMembershipScalarWhereWithAggregatesInput | Prisma.BoardMembershipScalarWhereWithAggregatesInput[]
   OR?: Prisma.BoardMembershipScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BoardMembershipScalarWhereWithAggregatesInput | Prisma.BoardMembershipScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"BoardMembership"> | number
+  id?: Prisma.StringWithAggregatesFilter<"BoardMembership"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"BoardMembership"> | $Enums.Role
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BoardMembership"> | Date | string
-  userId?: Prisma.IntWithAggregatesFilter<"BoardMembership"> | number
-  boardId?: Prisma.IntWithAggregatesFilter<"BoardMembership"> | number
+  userId?: Prisma.StringWithAggregatesFilter<"BoardMembership"> | string
+  boardId?: Prisma.StringWithAggregatesFilter<"BoardMembership"> | string
 }
 
 export type BoardMembershipCreateInput = {
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutMembershipsInput
@@ -284,14 +241,15 @@ export type BoardMembershipCreateInput = {
 }
 
 export type BoardMembershipUncheckedCreateInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  userId: number
-  boardId: number
+  userId: string
+  boardId: string
 }
 
 export type BoardMembershipUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutMembershipsNestedInput
@@ -299,49 +257,44 @@ export type BoardMembershipUpdateInput = {
 }
 
 export type BoardMembershipUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
-  boardId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  boardId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BoardMembershipCreateManyInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  userId: number
-  boardId: number
+  userId: string
+  boardId: string
 }
 
 export type BoardMembershipUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BoardMembershipUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
-  boardId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  boardId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BoardMembershipUserIdBoardIdCompoundUniqueInput = {
-  userId: number
-  boardId: number
+  userId: string
+  boardId: string
 }
 
 export type BoardMembershipCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  boardId?: Prisma.SortOrder
-}
-
-export type BoardMembershipAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   boardId?: Prisma.SortOrder
 }
@@ -362,12 +315,6 @@ export type BoardMembershipMinOrderByAggregateInput = {
   boardId?: Prisma.SortOrder
 }
 
-export type BoardMembershipSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  boardId?: Prisma.SortOrder
-}
-
 export type BoardMembershipListRelationFilter = {
   every?: Prisma.BoardMembershipWhereInput
   some?: Prisma.BoardMembershipWhereInput
@@ -378,20 +325,16 @@ export type BoardMembershipOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type BoardMembershipCreateNestedManyWithoutUserInput = {
@@ -479,16 +422,17 @@ export type BoardMembershipUncheckedUpdateManyWithoutBoardNestedInput = {
 }
 
 export type BoardMembershipCreateWithoutUserInput = {
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutMembershipsInput
 }
 
 export type BoardMembershipUncheckedCreateWithoutUserInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  boardId: number
+  boardId: string
 }
 
 export type BoardMembershipCreateOrConnectWithoutUserInput = {
@@ -521,24 +465,25 @@ export type BoardMembershipScalarWhereInput = {
   AND?: Prisma.BoardMembershipScalarWhereInput | Prisma.BoardMembershipScalarWhereInput[]
   OR?: Prisma.BoardMembershipScalarWhereInput[]
   NOT?: Prisma.BoardMembershipScalarWhereInput | Prisma.BoardMembershipScalarWhereInput[]
-  id?: Prisma.IntFilter<"BoardMembership"> | number
+  id?: Prisma.StringFilter<"BoardMembership"> | string
   role?: Prisma.EnumRoleFilter<"BoardMembership"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"BoardMembership"> | Date | string
-  userId?: Prisma.IntFilter<"BoardMembership"> | number
-  boardId?: Prisma.IntFilter<"BoardMembership"> | number
+  userId?: Prisma.StringFilter<"BoardMembership"> | string
+  boardId?: Prisma.StringFilter<"BoardMembership"> | string
 }
 
 export type BoardMembershipCreateWithoutBoardInput = {
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
 }
 
 export type BoardMembershipUncheckedCreateWithoutBoardInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  userId: number
+  userId: string
 }
 
 export type BoardMembershipCreateOrConnectWithoutBoardInput = {
@@ -568,57 +513,59 @@ export type BoardMembershipUpdateManyWithWhereWithoutBoardInput = {
 }
 
 export type BoardMembershipCreateManyUserInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  boardId: number
+  boardId: string
 }
 
 export type BoardMembershipUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutMembershipsNestedInput
 }
 
 export type BoardMembershipUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boardId?: Prisma.IntFieldUpdateOperationsInput | number
+  boardId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BoardMembershipUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boardId?: Prisma.IntFieldUpdateOperationsInput | number
+  boardId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BoardMembershipCreateManyBoardInput = {
-  id?: number
+  id?: string
   role?: $Enums.Role
   createdAt?: Date | string
-  userId: number
+  userId: string
 }
 
 export type BoardMembershipUpdateWithoutBoardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
 }
 
 export type BoardMembershipUncheckedUpdateWithoutBoardInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BoardMembershipUncheckedUpdateManyWithoutBoardInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -682,11 +629,11 @@ export type $BoardMembershipPayload<ExtArgs extends runtime.Types.Extensions.Int
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     role: $Enums.Role
     createdAt: Date
-    userId: number
-    boardId: number
+    userId: string
+    boardId: string
   }, ExtArgs["result"]["boardMembership"]>
   composites: {}
 }
@@ -1112,11 +1059,11 @@ export interface Prisma__BoardMembershipClient<T, Null = never, ExtArgs extends 
  * Fields of the BoardMembership model
  */
 export interface BoardMembershipFieldRefs {
-  readonly id: Prisma.FieldRef<"BoardMembership", 'Int'>
+  readonly id: Prisma.FieldRef<"BoardMembership", 'String'>
   readonly role: Prisma.FieldRef<"BoardMembership", 'Role'>
   readonly createdAt: Prisma.FieldRef<"BoardMembership", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"BoardMembership", 'Int'>
-  readonly boardId: Prisma.FieldRef<"BoardMembership", 'Int'>
+  readonly userId: Prisma.FieldRef<"BoardMembership", 'String'>
+  readonly boardId: Prisma.FieldRef<"BoardMembership", 'String'>
 }
     
 

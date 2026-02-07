@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt'; // <-- Импортируйте bcrypt
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
@@ -20,7 +20,7 @@ export class UsersService {
     return user;
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
     });
@@ -36,7 +36,7 @@ export class UsersService {
     return await this.prisma.user.findMany();
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     await this.findOne(id);
 
     await this.prisma.user.delete({

@@ -27,35 +27,31 @@ export type AggregateTask = {
 }
 
 export type TaskAvgAggregateOutputType = {
-  id: number | null
   order: number | null
-  columnId: number | null
 }
 
 export type TaskSumAggregateOutputType = {
-  id: number | null
   order: number | null
-  columnId: number | null
 }
 
 export type TaskMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   title: string | null
   description: string | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  columnId: number | null
+  columnId: string | null
 }
 
 export type TaskMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   title: string | null
   description: string | null
   order: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  columnId: number | null
+  columnId: string | null
 }
 
 export type TaskCountAggregateOutputType = {
@@ -71,15 +67,11 @@ export type TaskCountAggregateOutputType = {
 
 
 export type TaskAvgAggregateInputType = {
-  id?: true
   order?: true
-  columnId?: true
 }
 
 export type TaskSumAggregateInputType = {
-  id?: true
   order?: true
-  columnId?: true
 }
 
 export type TaskMinAggregateInputType = {
@@ -200,13 +192,13 @@ export type TaskGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type TaskGroupByOutputType = {
-  id: number
+  id: string
   title: string
   description: string | null
   order: number
   createdAt: Date
   updatedAt: Date
-  columnId: number
+  columnId: string
   _count: TaskCountAggregateOutputType | null
   _avg: TaskAvgAggregateOutputType | null
   _sum: TaskSumAggregateOutputType | null
@@ -233,13 +225,13 @@ export type TaskWhereInput = {
   AND?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
-  id?: Prisma.IntFilter<"Task"> | number
+  id?: Prisma.StringFilter<"Task"> | string
   title?: Prisma.StringFilter<"Task"> | string
   description?: Prisma.StringNullableFilter<"Task"> | string | null
   order?: Prisma.FloatFilter<"Task"> | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  columnId?: Prisma.IntFilter<"Task"> | number
+  columnId?: Prisma.StringFilter<"Task"> | string
   column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }
 
@@ -255,7 +247,7 @@ export type TaskOrderByWithRelationInput = {
 }
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
@@ -264,7 +256,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<{
   order?: Prisma.FloatFilter<"Task"> | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  columnId?: Prisma.IntFilter<"Task"> | number
+  columnId?: Prisma.StringFilter<"Task"> | string
   column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }, "id">
 
@@ -287,16 +279,17 @@ export type TaskScalarWhereWithAggregatesInput = {
   AND?: Prisma.TaskScalarWhereWithAggregatesInput | Prisma.TaskScalarWhereWithAggregatesInput[]
   OR?: Prisma.TaskScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TaskScalarWhereWithAggregatesInput | Prisma.TaskScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Task"> | number
+  id?: Prisma.StringWithAggregatesFilter<"Task"> | string
   title?: Prisma.StringWithAggregatesFilter<"Task"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Task"> | string | null
   order?: Prisma.FloatWithAggregatesFilter<"Task"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
-  columnId?: Prisma.IntWithAggregatesFilter<"Task"> | number
+  columnId?: Prisma.StringWithAggregatesFilter<"Task"> | string
 }
 
 export type TaskCreateInput = {
+  id?: string
   title: string
   description?: string | null
   order: number
@@ -306,16 +299,17 @@ export type TaskCreateInput = {
 }
 
 export type TaskUncheckedCreateInput = {
-  id?: number
+  id?: string
   title: string
   description?: string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  columnId: number
+  columnId: string
 }
 
 export type TaskUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -325,26 +319,27 @@ export type TaskUpdateInput = {
 }
 
 export type TaskUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  columnId?: Prisma.IntFieldUpdateOperationsInput | number
+  columnId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TaskCreateManyInput = {
-  id?: number
+  id?: string
   title: string
   description?: string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  columnId: number
+  columnId: string
 }
 
 export type TaskUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -353,13 +348,13 @@ export type TaskUpdateManyMutationInput = {
 }
 
 export type TaskUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  columnId?: Prisma.IntFieldUpdateOperationsInput | number
+  columnId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TaskCountOrderByAggregateInput = {
@@ -373,9 +368,7 @@ export type TaskCountOrderByAggregateInput = {
 }
 
 export type TaskAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  columnId?: Prisma.SortOrder
 }
 
 export type TaskMaxOrderByAggregateInput = {
@@ -399,9 +392,7 @@ export type TaskMinOrderByAggregateInput = {
 }
 
 export type TaskSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  columnId?: Prisma.SortOrder
 }
 
 export type TaskListRelationFilter = {
@@ -469,6 +460,7 @@ export type TaskUncheckedUpdateManyWithoutColumnNestedInput = {
 }
 
 export type TaskCreateWithoutColumnInput = {
+  id?: string
   title: string
   description?: string | null
   order: number
@@ -477,7 +469,7 @@ export type TaskCreateWithoutColumnInput = {
 }
 
 export type TaskUncheckedCreateWithoutColumnInput = {
-  id?: number
+  id?: string
   title: string
   description?: string | null
   order: number
@@ -515,17 +507,17 @@ export type TaskScalarWhereInput = {
   AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
   OR?: Prisma.TaskScalarWhereInput[]
   NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  id?: Prisma.IntFilter<"Task"> | number
+  id?: Prisma.StringFilter<"Task"> | string
   title?: Prisma.StringFilter<"Task"> | string
   description?: Prisma.StringNullableFilter<"Task"> | string | null
   order?: Prisma.FloatFilter<"Task"> | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  columnId?: Prisma.IntFilter<"Task"> | number
+  columnId?: Prisma.StringFilter<"Task"> | string
 }
 
 export type TaskCreateManyColumnInput = {
-  id?: number
+  id?: string
   title: string
   description?: string | null
   order: number
@@ -534,6 +526,7 @@ export type TaskCreateManyColumnInput = {
 }
 
 export type TaskUpdateWithoutColumnInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -542,7 +535,7 @@ export type TaskUpdateWithoutColumnInput = {
 }
 
 export type TaskUncheckedUpdateWithoutColumnInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -551,7 +544,7 @@ export type TaskUncheckedUpdateWithoutColumnInput = {
 }
 
 export type TaskUncheckedUpdateManyWithoutColumnInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -621,13 +614,13 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     column: Prisma.$ColumnPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     title: string
     description: string | null
     order: number
     createdAt: Date
     updatedAt: Date
-    columnId: number
+    columnId: string
   }, ExtArgs["result"]["task"]>
   composites: {}
 }
@@ -1052,13 +1045,13 @@ export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the Task model
  */
 export interface TaskFieldRefs {
-  readonly id: Prisma.FieldRef<"Task", 'Int'>
+  readonly id: Prisma.FieldRef<"Task", 'String'>
   readonly title: Prisma.FieldRef<"Task", 'String'>
   readonly description: Prisma.FieldRef<"Task", 'String'>
   readonly order: Prisma.FieldRef<"Task", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Task", 'DateTime'>
-  readonly columnId: Prisma.FieldRef<"Task", 'Int'>
+  readonly columnId: Prisma.FieldRef<"Task", 'String'>
 }
     
 

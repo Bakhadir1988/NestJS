@@ -20,22 +20,12 @@ export type BoardModel = runtime.Types.Result.DefaultSelection<Prisma.$BoardPayl
 
 export type AggregateBoard = {
   _count: BoardCountAggregateOutputType | null
-  _avg: BoardAvgAggregateOutputType | null
-  _sum: BoardSumAggregateOutputType | null
   _min: BoardMinAggregateOutputType | null
   _max: BoardMaxAggregateOutputType | null
 }
 
-export type BoardAvgAggregateOutputType = {
-  id: number | null
-}
-
-export type BoardSumAggregateOutputType = {
-  id: number | null
-}
-
 export type BoardMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   name: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -43,7 +33,7 @@ export type BoardMinAggregateOutputType = {
 }
 
 export type BoardMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   name: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,14 +49,6 @@ export type BoardCountAggregateOutputType = {
   _all: number
 }
 
-
-export type BoardAvgAggregateInputType = {
-  id?: true
-}
-
-export type BoardSumAggregateInputType = {
-  id?: true
-}
 
 export type BoardMinAggregateInputType = {
   id?: true
@@ -131,18 +113,6 @@ export type BoardAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: BoardAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: BoardSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: BoardMinAggregateInputType
@@ -173,21 +143,17 @@ export type BoardGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: BoardCountAggregateInputType | true
-  _avg?: BoardAvgAggregateInputType
-  _sum?: BoardSumAggregateInputType
   _min?: BoardMinAggregateInputType
   _max?: BoardMaxAggregateInputType
 }
 
 export type BoardGroupByOutputType = {
-  id: number
+  id: string
   name: string
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
   _count: BoardCountAggregateOutputType | null
-  _avg: BoardAvgAggregateOutputType | null
-  _sum: BoardSumAggregateOutputType | null
   _min: BoardMinAggregateOutputType | null
   _max: BoardMaxAggregateOutputType | null
 }
@@ -211,7 +177,7 @@ export type BoardWhereInput = {
   AND?: Prisma.BoardWhereInput | Prisma.BoardWhereInput[]
   OR?: Prisma.BoardWhereInput[]
   NOT?: Prisma.BoardWhereInput | Prisma.BoardWhereInput[]
-  id?: Prisma.IntFilter<"Board"> | number
+  id?: Prisma.StringFilter<"Board"> | string
   name?: Prisma.StringFilter<"Board"> | string
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
@@ -231,7 +197,7 @@ export type BoardOrderByWithRelationInput = {
 }
 
 export type BoardWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.BoardWhereInput | Prisma.BoardWhereInput[]
   OR?: Prisma.BoardWhereInput[]
   NOT?: Prisma.BoardWhereInput | Prisma.BoardWhereInput[]
@@ -250,17 +216,15 @@ export type BoardOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BoardCountOrderByAggregateInput
-  _avg?: Prisma.BoardAvgOrderByAggregateInput
   _max?: Prisma.BoardMaxOrderByAggregateInput
   _min?: Prisma.BoardMinOrderByAggregateInput
-  _sum?: Prisma.BoardSumOrderByAggregateInput
 }
 
 export type BoardScalarWhereWithAggregatesInput = {
   AND?: Prisma.BoardScalarWhereWithAggregatesInput | Prisma.BoardScalarWhereWithAggregatesInput[]
   OR?: Prisma.BoardScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BoardScalarWhereWithAggregatesInput | Prisma.BoardScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Board"> | number
+  id?: Prisma.StringWithAggregatesFilter<"Board"> | string
   name?: Prisma.StringWithAggregatesFilter<"Board"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
@@ -268,6 +232,7 @@ export type BoardScalarWhereWithAggregatesInput = {
 }
 
 export type BoardCreateInput = {
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -277,7 +242,7 @@ export type BoardCreateInput = {
 }
 
 export type BoardUncheckedCreateInput = {
-  id?: number
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -287,6 +252,7 @@ export type BoardUncheckedCreateInput = {
 }
 
 export type BoardUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -296,7 +262,7 @@ export type BoardUpdateInput = {
 }
 
 export type BoardUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -306,7 +272,7 @@ export type BoardUncheckedUpdateInput = {
 }
 
 export type BoardCreateManyInput = {
-  id?: number
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -314,6 +280,7 @@ export type BoardCreateManyInput = {
 }
 
 export type BoardUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -321,7 +288,7 @@ export type BoardUpdateManyMutationInput = {
 }
 
 export type BoardUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,10 +308,6 @@ export type BoardCountOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
 }
 
-export type BoardAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-}
-
 export type BoardMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -359,10 +322,6 @@ export type BoardMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
-}
-
-export type BoardSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
 }
 
 export type BoardCreateNestedOneWithoutMembershipsInput = {
@@ -398,6 +357,7 @@ export type BoardUpdateOneRequiredWithoutColumnsNestedInput = {
 }
 
 export type BoardCreateWithoutMembershipsInput = {
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -406,7 +366,7 @@ export type BoardCreateWithoutMembershipsInput = {
 }
 
 export type BoardUncheckedCreateWithoutMembershipsInput = {
-  id?: number
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -431,6 +391,7 @@ export type BoardUpdateToOneWithWhereWithoutMembershipsInput = {
 }
 
 export type BoardUpdateWithoutMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -439,7 +400,7 @@ export type BoardUpdateWithoutMembershipsInput = {
 }
 
 export type BoardUncheckedUpdateWithoutMembershipsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -448,6 +409,7 @@ export type BoardUncheckedUpdateWithoutMembershipsInput = {
 }
 
 export type BoardCreateWithoutColumnsInput = {
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -456,7 +418,7 @@ export type BoardCreateWithoutColumnsInput = {
 }
 
 export type BoardUncheckedCreateWithoutColumnsInput = {
-  id?: number
+  id?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -481,6 +443,7 @@ export type BoardUpdateToOneWithWhereWithoutColumnsInput = {
 }
 
 export type BoardUpdateWithoutColumnsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -489,7 +452,7 @@ export type BoardUpdateWithoutColumnsInput = {
 }
 
 export type BoardUncheckedUpdateWithoutColumnsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -588,7 +551,7 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     memberships: Prisma.$BoardMembershipPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     name: string
     createdAt: Date
     updatedAt: Date
@@ -1018,7 +981,7 @@ export interface Prisma__BoardClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Board model
  */
 export interface BoardFieldRefs {
-  readonly id: Prisma.FieldRef<"Board", 'Int'>
+  readonly id: Prisma.FieldRef<"Board", 'String'>
   readonly name: Prisma.FieldRef<"Board", 'String'>
   readonly createdAt: Prisma.FieldRef<"Board", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Board", 'DateTime'>

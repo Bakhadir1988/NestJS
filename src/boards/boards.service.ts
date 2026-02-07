@@ -17,6 +17,21 @@ import { BoardEntity } from './entities/board.entity';
 export class BoardsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  public async checkAccess(boardId: string, userId: string) {
+    const membership = await this.prisma.boardMembership.findUnique({
+      where: {
+        userId_boardId: {
+          userId: userId,
+          boardId,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new ForbiddenException('User is not a member of the board');
+    }
+  }
+
   async create(
     createBoardDto: CreateBoardDto,
     user: UserFromJwt,
@@ -83,7 +98,7 @@ export class BoardsService {
     };
   }
 
-  async findOne(id: number, user: UserFromJwt) {
+  async findOne(id: string, user: UserFromJwt) {
     const board = await this.prisma.board.findFirst({
       where: {
         id,
@@ -104,7 +119,7 @@ export class BoardsService {
   }
 
   async inviteMember(
-    boardId: number,
+    boardId: string,
     inviteUser: InviteUserDto,
     user: UserFromJwt,
   ) {
@@ -160,7 +175,7 @@ export class BoardsService {
     });
   }
 
-  async delete(id: number, user: UserFromJwt) {
+  async delete(id: string, user: UserFromJwt) {
     const result = await this.prisma.board.updateMany({
       where: {
         id: id,
@@ -184,7 +199,7 @@ export class BoardsService {
   }
 
   async update(
-    id: number,
+    id: string,
     updateBoardDto: UpdateBoardDto,
     user: UserFromJwt,
   ): Promise<BoardEntity> {

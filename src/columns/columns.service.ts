@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UserFromJwt } from 'src/auth/interfaces';
+import { BoardsService } from 'src/boards/boards.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { CreateColumnDto } from './dto/create-column.dto';
@@ -8,28 +9,15 @@ import { ColumnEntity } from './entities/columns.entity';
 
 @Injectable()
 export class ColumnsService {
-  constructor(private readonly prisma: PrismaService) {}
-
-  // Проверка доступа к доске
-  private async checkAccess(boardId: number, userId: number) {
-    const membership = await this.prisma.boardMembership.findUnique({
-      where: {
-        userId_boardId: {
-          userId: userId,
-          boardId,
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new ForbiddenException('User is not a member of the board');
-    }
-  }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly boardService: BoardsService,
+  ) {}
 
   // Поиск колонки по id
-  private async getColumn(boardId: number, columnId: number, userId: number) {
+  private async getColumn(boardId: string, columnId: string, userId: string) {
     // 1. Вызов await this.checkAccess(boardId, userId)
-    await this.checkAccess(boardId, userId);
+    await this.boardService.checkAccess(boardId, userId);
     // 2. Поиск колонки по columnId
     const column = await this.prisma.column.findFirst({
       where: {
@@ -46,11 +34,11 @@ export class ColumnsService {
   }
 
   async create(
-    boardId: number,
+    boardId: string,
     createColumn: CreateColumnDto,
     user: UserFromJwt,
   ) {
-    await this.checkAccess(boardId, user.id);
+    await this.boardService.checkAccess(boardId, user.id);
 
     const columnCount = await this.prisma.column.count({
       where: {
@@ -69,8 +57,8 @@ export class ColumnsService {
     return new ColumnEntity(column);
   }
 
-  async findAll(boardId: number, user: UserFromJwt) {
-    await this.checkAccess(boardId, user.id);
+  async findAll(boardId: string, user: UserFromJwt) {
+    await this.boardService.checkAccess(boardId, user.id);
 
     const columns = await this.prisma.column.findMany({
       where: {
@@ -86,8 +74,8 @@ export class ColumnsService {
   }
 
   async update(
-    boardId: number,
-    columnId: number,
+    boardId: string,
+    columnId: string,
     updateColumnDto: UpdateColumnDto,
     user: UserFromJwt,
   ) {
@@ -101,7 +89,7 @@ export class ColumnsService {
     return new ColumnEntity(column);
   }
 
-  async remove(boardId: number, columnId: number, user: UserFromJwt) {
+  async remove(boardId: string, columnId: string, user: UserFromJwt) {
     await this.getColumn(boardId, columnId, user.id);
 
     const column = await this.prisma.column.update({

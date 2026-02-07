@@ -6,13 +6,12 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
-  Request,
   UseGuards,
 } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
-import { type RequestWithUser } from 'src/auth/interfaces';
+import { type UserFromJwt } from 'src/auth/interfaces';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 import { UserEntity } from './entities/user.entity';
@@ -22,11 +21,10 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard) // <-- ЗАЩИЩАЕМ эндпоинт этим гардом
+  @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getProfile(@Request() req: RequestWithUser): Promise<UserEntity> {
-    const userId = req.user.id;
-    const user = await this.usersService.findOne(userId);
+  async getProfile(@CurrentUser() user: UserFromJwt) {
+    await this.usersService.findOne(user.id);
     return new UserEntity(user);
   }
 
@@ -38,7 +36,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
     return new UserEntity(user);
   }
@@ -51,7 +49,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id') id: string) {
     await this.usersService.delete(id);
     return { message: `User ${id} deleted successfully` };
   }

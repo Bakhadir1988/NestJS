@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -44,19 +43,13 @@ export class BoardsController {
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() request: RequestWithUser,
-  ) {
+  async findOne(@Param('id') id: string, @Request() request: RequestWithUser) {
     const user = request.user;
     return this.boardsService.findOne(id, user);
   }
 
   @Delete(':id')
-  async delete(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() request: RequestWithUser,
-  ) {
+  async delete(@Param('id') id: string, @Request() request: RequestWithUser) {
     const user = request.user;
     await this.boardsService.delete(id, user);
 
@@ -65,7 +58,7 @@ export class BoardsController {
 
   @Patch(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateBoard: UpdateBoardDto,
     @Request() request: RequestWithUser,
   ) {
@@ -75,7 +68,7 @@ export class BoardsController {
 
   @Post(':id/members')
   async inviteMember(
-    @Param('id', ParseIntPipe) boardId: number,
+    @Param('id') boardId: string,
     @Body() inviteMemeber: InviteUserDto,
     @Request() request: RequestWithUser,
   ) {

@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -26,7 +25,7 @@ export class ColumnsController {
   // создание колонки
   @Post()
   async create(
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('boardId') boardId: string,
     @Body() createColumn: CreateColumnDto,
     @CurrentUser() user: UserFromJwt,
   ) {
@@ -36,7 +35,7 @@ export class ColumnsController {
   //  Получение колонок
   @Get()
   async findAll(
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('boardId') boardId: string,
     @CurrentUser() user: UserFromJwt,
   ) {
     return this.columnsService.findAll(boardId, user);
@@ -45,10 +44,10 @@ export class ColumnsController {
   @Patch(':columnId')
   update(
     // 1. Получаем boardId из пути контроллера
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('boardId') boardId: string,
 
     // 2. Получаем columnId из пути этого метода
-    @Param('columnId', ParseIntPipe) columnId: number,
+    @Param('columnId') columnId: string,
 
     // 3. Получаем тело запроса
     @Body() updateColumnDto: UpdateColumnDto,
@@ -64,8 +63,8 @@ export class ColumnsController {
   @Delete(':columnId')
   @HttpCode(204)
   async remove(
-    @Param('boardId', ParseIntPipe) boardId: number,
-    @Param('columnId', ParseIntPipe) columnId: number,
+    @Param('boardId') boardId: string,
+    @Param('columnId') columnId: string,
     @CurrentUser() user: UserFromJwt,
   ) {
     return this.columnsService.remove(boardId, columnId, user);
