@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserFromJwt } from 'src/auth/interfaces';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import { CreateBoardDto } from './dto/create-board.dto';
+import { InviteUserDto } from './dto/invite-user.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { BoardEntity } from './entities/board.entity';
 
@@ -95,6 +101,63 @@ export class BoardsService {
       throw new NotFoundException(`Board with ID ${id} not found`);
     }
     return new BoardEntity(board);
+  }
+
+  async inviteMember(
+    boardId: number,
+    inviteUser: InviteUserDto,
+    user: UserFromJwt,
+  ) {
+    // Шаг 1.1: Найти членство текущего пользователя (кто приглашает)
+    const membership = await this.prisma.boardMembership.findFirst({
+      where: {
+        boardId,
+        userId: user.id,
+      },
+    });
+
+    // Шаг 1.2: Проверить права. Либо членства нет, либо роль не 'OWNER'
+    if (!membership || membership.role !== 'OWNER') {
+      throw new ForbiddenException(
+        'You do not have permission to invite members to this board.',
+      );
+    }
+    // Шаг 2: Найти пользователя, которого приглашают
+    const invitee = await this.prisma.user.findUnique({
+      where: {
+        email: inviteUser.email,
+      },
+    });
+
+    if (!invitee) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Шаг 3: Проверка на само-приглашение
+    if (invitee.id === user.id) {
+      throw new BadRequestException('Cannot invite yourself');
+    }
+
+    // Шаг 4: Проверка на дубликат
+    const existingMembership = await this.prisma.boardMembership.findFirst({
+      where: {
+        userId: invitee.id,
+        boardId: boardId,
+      },
+    });
+
+    if (existingMembership) {
+      throw new BadRequestException('User is already a member');
+    }
+
+    // Шаг 5: Создание новой записи в таблице boardMembership
+    return await this.prisma.boardMembership.create({
+      data: {
+        userId: invitee.id,
+        boardId: boardId,
+        role: inviteUser.role,
+      },
+    });
   }
 
   async delete(id: number, user: UserFromJwt) {

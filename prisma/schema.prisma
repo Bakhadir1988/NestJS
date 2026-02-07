@@ -82,5 +82,7 @@ model Column {
   // Связь: в колонке много задач
   tasks     Task[]
 
+  deletedAt DateTime?
+
   @@index([boardId])
 }

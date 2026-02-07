@@ -1,4 +1,3 @@
-// src/boards/dto/update-board.dto.ts
 import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateBoardDto {

@@ -17,6 +17,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { InviteUserDto } from './dto/invite-user.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
 @UseGuards(JwtAuthGuard)
@@ -26,11 +27,11 @@ export class BoardsController {
 
   @Post()
   async create(
-    @Body() createBoardDto: CreateBoardDto,
+    @Body() createBoard: CreateBoardDto,
     @Request() req: RequestWithUser,
   ) {
     const user = req.user as UserFromJwt;
-    return this.boardsService.create(createBoardDto, user);
+    return this.boardsService.create(createBoard, user);
   }
 
   @Get()
@@ -43,7 +44,7 @@ export class BoardsController {
   }
 
   @Get(':id')
-  findOne(
+  async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Request() request: RequestWithUser,
   ) {
@@ -63,12 +64,22 @@ export class BoardsController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateBoardDto: UpdateBoardDto,
+    @Body() updateBoard: UpdateBoardDto,
     @Request() request: RequestWithUser,
   ) {
     const user = request.user;
-    return this.boardsService.update(id, updateBoardDto, user);
+    return this.boardsService.update(id, updateBoard, user);
+  }
+
+  @Post(':id/members')
+  async inviteMember(
+    @Param('id', ParseIntPipe) boardId: number,
+    @Body() inviteMemeber: InviteUserDto,
+    @Request() request: RequestWithUser,
+  ) {
+    const user = request.user;
+    return this.boardsService.inviteMember(boardId, inviteMemeber, user);
   }
 }

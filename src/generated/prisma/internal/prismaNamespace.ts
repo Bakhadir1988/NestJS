@@ -870,7 +870,8 @@ export const ColumnScalarFieldEnum = {
   order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  boardId: 'boardId'
+  boardId: 'boardId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type ColumnScalarFieldEnum = (typeof ColumnScalarFieldEnum)[keyof typeof ColumnScalarFieldEnum]
